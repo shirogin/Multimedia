@@ -1,0 +1,18 @@
+bye=loadBytes("text.txt")
+result=[]
+i=0
+while( i < len(bye)-1):
+    print(bye[i])
+    j=i
+    counter=1
+    while(j<len(bye)-1 and bye[j+1]==bye[j]):
+        print(str(bye[j]),bye[i])
+        counter+=1
+        j+=1
+    if(counter>1):
+        result.append(counter)
+    i+=1
+print(result)
+
+    
+    
