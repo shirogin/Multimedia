@@ -1,7 +1,7 @@
 AI = True
 w = 900
 h = 600
-FPS = 10
+FPS = 40
 difficulty = 50/100
 canvasW = 400
 canvasH = 400
