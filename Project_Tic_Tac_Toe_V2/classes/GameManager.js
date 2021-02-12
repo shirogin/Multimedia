@@ -73,6 +73,21 @@ class GameManager {
         textFont(settings.display.font);
         textAlign(CENTER)
     }
+    switchC(){
+        settings.gamePlay.Computer=!settings.gamePlay.Computer;
+        this.game.cp=0
+        this.init()
+    }
+    switchD(){
+        settings.gamePlay.Difficulty=((settings.gamePlay.Difficulty)%4)+1;
+        console.log(settings.gamePlay.Difficulty);
+        this.game.cp=0
+        this.init()
+    }
+    init(){
+        this.screenManager.init()
+        this.game.init()
+    }
     async gameOver(){
         if(this.game.lastWinner && this.game.lastWinner.player!=="TIE"){
             this.screenManager.drawWinLine();
@@ -81,7 +96,6 @@ class GameManager {
             this.screenManager.drawDialog("TIE")
         }
         await delay(settings.gamePlay.Dialog*1000);
-        this.screenManager.init()
-        this.game.init()
+        this.init();
     }
 }

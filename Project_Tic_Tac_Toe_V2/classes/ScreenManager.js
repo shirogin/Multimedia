@@ -7,6 +7,8 @@ class ScreenManager {
     init(){
         this.drawBackground()
         this.drawBoard()
+        this.drawChoice()
+        if(settings.gamePlay.Computer)this.drawDifficulty()
         if(this.gameManager.game){
             this.drawPlayerScore(0)
             this.drawPlayerScore(1)
@@ -47,7 +49,18 @@ class ScreenManager {
         text(message,...settings.display.dialog.message)
     }
     drawChoice(){
-        
+        textSize(settings.display.twoPlayer.size)
+        stroke(...settings.display.twoPlayer.color)
+        strokeWeight(1)
+        fill(...settings.display.twoPlayer.color)
+        text(settings.gamePlay.Computer?"2 Players":"Computer",...settings.display.twoPlayer.text)
+    }
+    drawDifficulty(){
+        textSize(settings.display.difficulty.size)
+        stroke(...settings.display.difficulty.color)
+        strokeWeight(1)
+        fill(...settings.display.difficulty.color)
+        text(["Very Hard","Hard","Normal","Easy"][settings.gamePlay.Difficulty-1],...settings.display.difficulty.text)
     }
     drawWinLine() {
         let l = this.gameManager.game.lastWinner.list,
@@ -94,6 +107,16 @@ class ScreenManager {
             return {x,y}
         }
         return null;
+    }
+    getSwitch(){
+        let [x,y,width,height]=settings.display.twoPlayer.rect
+        if((mouseX > x) && (mouseX < (x+width)) && (mouseY > y) && (mouseY < (y+height))) return true;
+        return false;
+    }
+    getDifficulty(){
+        let [x,y,width,height]=settings.display.difficulty.rect
+        if((mouseX > x) && (mouseX < (x+width)) && (mouseY > y) && (mouseY < (y+height))) return true;
+        return false;
     }
     drawValue({x,y}){
         noFill()

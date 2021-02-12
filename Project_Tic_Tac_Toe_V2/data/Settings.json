@@ -42,8 +42,17 @@
             "color":[120,120,120],
             "message":[450,350]
         },
-        "choice":{
-            "rect":[]
+        "twoPlayer":{
+            "rect":[700,500,140,40],
+            "size":25,
+            "color":[80,80,80],
+            "text":[770,530]
+        },
+        "difficulty":{
+            "rect":[60,500,140,40],
+            "size":25,
+            "color":[80,80,80],
+            "text":[130,530]
         },
         "players":[
             {
