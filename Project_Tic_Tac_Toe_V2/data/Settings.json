@@ -1,0 +1,94 @@
+{
+    "display":{
+        "height" : 600,
+        "width" : 900,
+        "font":"Segoe UI",
+        "background":[255,255,255],
+        "color":[112, 112, 112],
+        "WinStroke":3,
+        "title":{
+            "color":[112, 112, 112],
+            "fontSize":100,
+            "font":"Segoe UI Bold",
+            "x":450,
+            "y":100
+        },
+        "table":{
+            "border":false  ,
+            "color":[112, 112, 112],
+            "stroke":9,
+            "width" : 400,
+            "height" : 400,
+            "x" : 250,
+            "y" : 140
+        },
+        "shapes":{
+            "stroke":9,
+            "circle":{
+                "radius":60,
+                "color":[112,112,112]
+            },
+            "cross":{
+                "lines":[
+                    [{"x": -30, "y": -30},{"x": 30, "y": 30}],
+                    [{"x": -30, "y": 30},{"x": 30, "y": -30}]
+                ],
+                "color":[112,112,112]
+            }
+        },
+        "dialog":{
+            "background":"rgba(230,230,230,0.8)",
+            "rect":[200,240,500,200,20],
+            "color":[120,120,120],
+            "message":[450,350]
+        },
+        "choice":{
+            "rect":[]
+        },
+        "players":[
+            {
+                "name":{
+                    "x":90,
+                    "y":200,
+                    "size":25,
+                    "stroke":2
+                },
+                "score":{
+                    "x":90,
+                    "y":300,
+                    "size":60,
+                    "stroke":2
+                },
+                "color":[112,112,112],
+                "highlighted":[40,40,40],
+                "win":[255,40,40]
+            },
+            {
+                "name":{
+                    "x":770,
+                    "y":200,
+                    "size":25,
+                    "stroke":2
+                },
+                "score":{
+                    "x":770,
+                    "y":300,
+                    "size":60,
+                    "stroke":2
+                },
+                "color":[112,112,112],
+                "highlighted":[40,40,40],
+                "win":[40,255,40]
+            }
+        ]
+    },
+    "render":{
+        "FPS" : 60
+    },
+    "gamePlay":{
+        "AI" : true,
+        "Computer":false,
+        "Difficulty" : 4,
+        "Dialog":5
+    }
+}
