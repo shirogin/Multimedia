@@ -67,28 +67,84 @@ class GameManager {
             }
 
         }
+        let btns=settings.palettes.colorBtns,
+            Rect1= [...btns["groupe1"],...btns.rect],
+            Rect2= [...btns["groupe2"],...btns.rect];
+            settings.palettes.rects=[]
+        settings.palettes.rects[0]=settings.palettes.colors.map((color,i)=>{
+            let ps = [
+                ((btns.rect[0]+btns.space)*(i%btns.col)),
+                ((btns.rect[1]+btns.space)*Math.floor(i/btns.col))
+                ,0,0,0
+            ]
+            return Rect1.map((r,i)=>(r+ps[i]));
+        })
+        settings.palettes.rects[1]=settings.palettes.colors.map((color,i)=>{
+            let ps = [
+                ((btns.rect[0]+btns.space)*(i%btns.col)),
+                ((btns.rect[1]+btns.space)*Math.floor(i/btns.col))
+                ,0,0,0
+            ]
+            return Rect2.map((r,i)=>(r+ps[i]));
+        })
+        settings.palettes.rects.groupe1
         background(...settings.display.background)
         createCanvas(settings.display.width, settings.display.height)
         frameRate(settings.render.FPS)
         textFont(settings.display.font);
         textAlign(CENTER)
-    }
-    switchC(){
-        settings.gamePlay.Computer=!settings.gamePlay.Computer;
-        this.game.cp=0
-        this.init()
-    }
-    switchD(){
-        settings.gamePlay.Difficulty=((settings.gamePlay.Difficulty)%4)+1;
-        console.log(settings.gamePlay.Difficulty);
-        this.game.cp=0
-        this.init()
+
     }
     init(){
         this.screenManager.init()
-        this.game.init()
+        if(this.screenManager.screen==="GAME")this.game.init();
+    }
+    clickedCase(Case){
+        switch (Case) {
+            case "START1":
+                this.game.cp=0
+                this.screenManager.screen="GAME";
+                return this.init();
+            case "START2":
+                this.game.cp=1
+                this.screenManager.screen="GAME";
+                return this.init();
+            case "HOME":
+                this.screenManager.screen="MAIN";
+                break;
+            case "COMPUTERS":
+                settings.gamePlay.Computer=settings.gamePlay.AI=true;
+                break;
+            case "COMPUTERD":
+                settings.gamePlay.Computer=!(settings.gamePlay.AI=false);
+                break;
+            case "PLAYER":
+                settings.gamePlay.Computer=false
+                break;
+            case "EASY":
+            case "NORMAL":
+            case "HARD":
+            case "VERY HARD":
+                settings.gamePlay.Difficulty=settings.display.btns.difficulty[Case.toLowerCase()].level;
+                break
+            case "SWITCH":
+                this.game.players[0].symbole=this.game.players[0].symbole==="X"?"O":"X";
+                this.game.players[1].symbole=this.game.players[0].symbole==="X"?"O":"X";
+                break;
+            default:
+                break;
+        }
+        this.screenManager.init();
+        
+        
+    }
+    clickedColor(cl){
+        let {1:p,2:c}=cl.match(/C(\d):(\d+)/)
+        this.game.players[p].color= Number( c );
+        this.init()
     }
     async gameOver(){
+        
         if(this.game.lastWinner && this.game.lastWinner.player!=="TIE"){
             this.screenManager.drawWinLine();
             this.screenManager.drawDialog(this.game.players[this.game.lastWinner.player].name)

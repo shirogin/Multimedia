@@ -3,11 +3,20 @@ class Player{
         this.name = name
         this.score = 0
         this.symbole =  X ? "X": "O"
+        this.color=0
     }
 
     addScore(){
         this.score += 1
     }
+}
+class State{
+    constructor(player,elements){
+        if(player)this.player=player;
+        if(elements)this.elements=elements;
+    }
+    GameIsOver(){return !!this.player;}
+    isNotTie(){return this.player!=="TIE"}
 }
 class Board{
     constructor(){
@@ -22,34 +31,20 @@ class Board{
         let won = false
         for(let i=0;i<3;i++){
             if((this.board[0][i] != "") && (this.board[0][i] == this.board[1][i]) && (this.board[0][i] == this.board[2][i]))
-                return {
-                    "player": this.board[0][i],
-                    "elements": "H"+str(i)
-                };
+                return new State(this.board[0][i],"H"+i);
         }
         for(let i=0;i<3;i++){
             if((this.board[i][0] != "") && (this.board[i][0] == this.board[i][1]) && (this.board[i][0] == this.board[i][2]))
-                return {
-                    "player": this.board[i][0],
-                    "elements": "V"+str(i)
-                }
+                return new State(this.board[i][0],"V"+i)
         }
         if((this.board[0][0] != "") && (this.board[0][0] == this.board[1][1]) && (this.board[0][0] == this.board[2][2]))
-            return {
-                "player": this.board[0][0],
-                "elements": "P"
-            }
+            return new State(this.board[0][0],"P");
         if((this.board[2][0] != "") && (this.board[2][0] == this.board[1][1]) && (this.board[2][0] == this.board[0][2]))
-            return {
-                "player": this.board[2][0],
-                "elements": "S"
-            }
+            return new State(this.board[2][0],"S");
         if(this.available == 0)
-            return {
-                "player": "TIE"
-            }
+            return new State("TIE")
         else
-            return null
+            return new State()
     }
     setCase( i, j, symbole){
         if(this.board[i][j] === ""){
@@ -79,6 +74,7 @@ class Board{
         return av;
     }
 }
+
     
 class Game{
     constructor(Player1, Player2, gameManager, X=true){
@@ -107,13 +103,13 @@ class Game{
     }
     minimax( board, depth, maxim=true, Init=true){
         let state = board.state()
-        if(depth == 0 || state != null){
-            if (state == null || state["player"] == "TIE")
+        if(depth == 0 || state.GameIsOver()){
+            if (state === null)
+                return 0
+            if(state["player"] == "TIE")
                 return 0;
-            else if (state["player"] == this.players[0].symbole)
-                return -(depth+1);
-            else
-                return depth+1;
+            return (state["player"] === this.players[0].symbole?-1:1)*(depth+1);
+    
         }
         let avs = board.getAvailable()
         if(maxim){
@@ -149,13 +145,12 @@ class Game{
     nextStep(){
         let availables = this.board.getAvailable(),
             step =Math.floor( Math.random()* (availables.length-1))
-        this.nextMove(availables[step][0], availables[step][1])
+        this.nextMove({x:availables[step][0], y:availables[step][1]})
     }
 
     AIStep(){
-        console.log(ceil(this.board.available/settings.gamePlay.Difficulty));
-        let minimax = this.minimax(this.board, ceil(this.board.available/settings.gamePlay.Difficulty)),
-            step =Math.floor( Math.random()* (minimax.length-1)) 
+        let minimax = this.minimax(this.board, ceil(this.board.available*(settings.gamePlay.Difficulty/6))),
+        step =Math.floor( Math.random()* (minimax.length-1)) 
         this.nextMove({x:minimax[step][0],y:minimax[step][1]} )
     }
 
@@ -170,18 +165,19 @@ class Game{
             return false
         let state = this.board.state()
         this.gameManager.screenManager.drawValue({x,y});
-        if(state != null){
-            if(state.player === "X" || state.player === "O"){
+        if(state.GameIsOver()){
+            if(state.isNotTie()){
                 this.players[this.cp].addScore()
                 this.lastWinner = {
                     "player": this.cp,
-                    "list": state["elements"]
+                    "list": state.elements
                 }
                 this.won = true
             }
             this.on = false
             this.gameManager.gameOver();
         }
+        
         this.cp = (this.cp+1) % 2
         this.checkStep()
         return true
